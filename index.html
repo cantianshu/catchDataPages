@@ -1,0 +1,126 @@
+<!DOCTYPE html> 
+<html>
+<head>
+  <meta http-equiv=Content-Type content="text/html; charset=utf-8"/>
+  <meta http-equiv="x-ua-compatible" content="ie=emulateie7" />
+  <title>JS缓存数据分页</title>
+
+  <script src="http://min.static.jiaju.com/static/js/jquery/jquery-1.9.1.min.js" charset="UTF-8"></script>
+  <script src="pages.js" charset="UTF-8"></script>
+
+  <style>
+
+/*----pages---s--*/
+.wrap-item .pages{
+  text-align:right;
+  width:630px;
+  position:absolute;
+  bottom:0;
+}
+.wrap-item .pages a{
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  margin: 0 4px;
+  color: #999999;
+  cursor: pointer;
+  background-color: #e1e1e1;
+}
+.wrap-item .pages a.next, .wrap-item .pages a.prev,  .wrap-item .pages a.ok-btn,.wrap-item .pages a.last{
+  width:70px;
+}
+.wrap-item .pages a.cur{
+  color: #ffffff;
+  background-color: #ff5842;
+}
+.wrap-item .pages a.next.none, .wrap-item .pages a.prev.none{
+  background-color: gray;
+}
+.pages-wrap .pages-to .inputWrap input{
+  width:40px;
+  border:solid 1px #999999;
+}
+.wrap-item .pages a.onLoading{
+  background-color: gray;
+}
+
+/*----pages---e--*/
+
+  </style>
+</head>
+<script>
+
+$(function () {
+
+  var source = 'http://api.roll.news.sina.com.cn/zt_list?channel=news&cat_1=shxw&cat_2==zqsk||=qwys||=shwx||=fz-shyf&level==1||=2&show_ext=1&show_all=1&show_num=5&tag=1&format=json';
+
+  /*var source =[{title:'title',keywords:'keywords'},{title:'title',keywords:'keywords'},{title:'title',keywords:'keywords'}];
+  for (var i=0; i< 50; i++) {
+    source.push( {title:'title'+i,keywords:'keywords'+i} );
+  }
+*/
+  $('#my-pages-wrap').myPages( {currPage:1,  pageSize:5, targetDom: $('#ul'), dataType:'jsonp',
+       source : source,
+       tpl : '<li><span>{title}</span><label>{keywords}</label></li>',
+       normalizeFun: function ( data ) {
+        console.log(JSON.stringify( data ));
+            var obj = {};
+            if ( data && data.result ) {
+              var d = data.result.data;
+              obj.currData = d;
+              obj.totalPage = data.result.total;
+            } else {
+              
+            }
+            return obj;
+        },
+        setParameterFun: function ( p ) {
+          return {page: p};
+        }
+
+        
+      }
+     );
+
+});
+
+</script>
+
+<body>
+  <div id ="wrap" class="wrap wrap-item">
+        <h3>列表内容</h3>
+        <div class="new-complain fl">
+          <ul id="ul">
+
+          </ul>
+        </div>
+
+  <br/>
+  <br/>
+
+
+  <p  id="my-pages-wrap" class="pages-wrap pages">
+      <!-- none  onLoading
+      <span class="pages-in" data-role="pages-in">
+        <a class="prev" href="javascript:void(0);"  >上一页</a>
+        <a href="javascript:void(0);"  >1</a>
+        <a class="cur" href="javascript:void(0);"   >2</a>
+        <a class="next" href="javascript:void(0);" >下一页</a>
+        <a class="last" href="javascript:void(0);" >最后一页</a>
+      </span>
+
+      <span class="pages-to" data-role="pages-to">
+        <span class="inputWrap"> 到 <input data-role="page-text" type="text"  />页</span>
+        <a class="ok-btn" href="javascript:void(0);">确定</a>
+      </span>
+      -->
+
+  </p>
+
+
+  </div>
+
+</body>
+</html>
